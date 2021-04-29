@@ -1,44 +1,37 @@
 {% extends "layout.html" %}
 {% block content %}
-{% if user.role == 'S'%}
-<div class="content-section">
-  <h1>Name: {{user.name}}</h1>
-  <h1>Role: Student</h1>
-  <h1>Classes Enrolled in: </h1>
-  {% for x in range(s_size) %}
-  <article class="media content-section">
-    <div class="media-body">
-      <div class="article-metadata">
-        <a class="mr-2">{{classes[x].name}}</a>
-        <small class="text-muted">{{classes[x].class_id}}</small>
-      </div>
-      {% if classes[x].class_id not in attendance_info%}
-      <p class="article-content"> <a class="mr-2"
-          href="{{ url_for('mark_attendance', class_id=classes[x].class_id) }}">Mark Attendance</a></p>
-      {%else%}
-      <p class="article-content"> <a class="mr-2">Attendance Marked for the day</a></p>
-      {%endif%}
+{% if current_user.role == 'S'%}
+{% for x in range(size) %}
+<article class="media content-section">
+  <div class="media-body">
+    <div class="article-metadata">
+      <h4><a class="mr-2">{{data[x].classname}}</a></h4>
     </div>
-  </article>
-  {% endfor %}
-</div>
-{%else%}
-<div class="content-section">
-  <h1>Name: {{user.name}}</h1>
-  <h1>Role: Teacher</h1>
-  <h1>Teaching Classes: </h1>
-  {% for x in range(t_size) %}
-  <article class="media content-section">
-    <div class="media-body">
-      <div class="article-metadata">
-        <a class="mr-2" href="{{ url_for('students', class_id=classes[x].class_id) }}">{{classes[x].name}}</a>
-        <small class="text-muted">{{attendance[x]}} %</small>
-      </div>
-    </div>
-  </article>
-  {% endfor %}
-</div>
+    <p class="article-content">Class ID = {{data[x].classid}}</a></p>
+    <p class="article-content">Instructor Name = {{data[x].instructorname}}</a></p>
+    <p class="article-content">Class attendance = {{data[x].class_average_attendance}} %</a></p>
+    {% if classes[x].class_id not in attendance_info%}
+    <p class="article-content"> <a class="mr-2"
+        href="{{ url_for('mark_attendance', class_id=classes[x].class_id) }}">Mark Attendance</a></p>
+    {%else%}
+    <p class="article-content"> <a class="mr-2">Attendance Marked for the day</a></p>
 
+    {%endif%}
+  </div>
+</article>
+{% endfor %}
+{%else%}
+{% for x in range(size) %}
+<article class="media content-section">
+  <div class="media-body">
+    <div class="article-metadata">
+      <h4><a class="mr-2" href="{{ url_for('students', class_id=data[x].classid) }}">{{data[x].classname}}</a></h4>
+    </div>
+    <p class="article-content">Class ID = {{data[x].classid}}</a></p>
+    <p class="article-content">Class attendance = {{data[x].class_average_attendance}} %</a></p>
+  </div>
+</article>
+{% endfor %}
 {%endif%}
 
 

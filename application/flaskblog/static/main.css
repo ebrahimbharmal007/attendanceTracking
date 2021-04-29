@@ -5,7 +5,7 @@ body {
 }
 
 h1, h2, h3, h4, h5, h6 {
-  color: #444444;
+  color: #222222;
 }
 
 .bg-steel {
@@ -77,4 +77,9 @@ a.article-title:hover {
 
 .account-heading {
   font-size: 2.5rem;
+}
+
+.list-group-item-light {
+  color: #000000;
+  background-color: #fdfdfe;
 }

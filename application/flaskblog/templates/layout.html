@@ -61,7 +61,32 @@
         {% endwith %}
         {% block content %}{% endblock %}
       </div>
-
+      {% if current_user.is_authenticated %}
+      <div class="col-md-4">
+        <div class="content-section">
+          <h3>Profile</h3>
+          <p class='text-muted'>
+          <ul class="list-group">
+            <li class="list-group-item list-group-item-light">Name: {{current_user.name}}</li>
+            {% if current_user.role == 'T' %}
+            <li class="list-group-item list-group-item-light">Role: Instructor</li>
+            {%else%}
+            <li class="list-group-item list-group-item-light">Role: Student</li>
+            {%endif%}
+            <li class="list-group-item list-group-item-light">ID: {{current_user.id}}</li>
+            {% if current_user.role == 'S' %}
+            <li class="list-group-item list-group-item-light">Average Attendance: {{average_attendance}} %</li>
+            {%endif%}
+            {% if current_user.role == 'T' %}
+            <li class="list-group-item list-group-item-light">Total Number of Classes: {{number_of_classes}}</li>
+            <li class="list-group-item list-group-item-light">Total Number of Students: {{total_students}} </li>
+            <li class="list-group-item list-group-item-light">Average Attendance: {{average_attendance}} %</li>
+            {%endif%}
+          </ul>
+          </p>
+        </div>
+      </div>
+      {%endif%}
     </div>
   </main>
 
