@@ -5,17 +5,17 @@
 <article class="media content-section">
   <div class="media-body">
     <div class="article-metadata">
-      <h4><a class="mr-2">{{data[x].classname}}</a></h4>
+      <h4 class="class_title">{{data[x].classname}}<span class="class_id_wrapper"
+          title="Class ID">{{data[x].classid}}</span></h4>
     </div>
-    <p class="article-content">Class ID = {{data[x].classid}}</a></p>
+    <!-- <p class="article-content">Class ID = {{data[x].classid}}</a></p> -->
     <p class="article-content">Instructor Name = {{data[x].instructorname}}</a></p>
     <p class="article-content">Class attendance = {{data[x].class_average_attendance}} %</a></p>
     {% if classes[x].class_id not in attendance_info%}
-    <p class="article-content"> <a class="mr-2"
+    <p class="article-content"> <a class="btn btn-outline-info"
         href="{{ url_for('mark_attendance', class_id=classes[x].class_id) }}">Mark Attendance</a></p>
     {%else%}
-    <p class="article-content"> <a class="mr-2">Attendance Marked for the day</a></p>
-
+    <p class="article-content"> <a class="alert alert-success">Attendance Marked</a></p>
     {%endif%}
   </div>
 </article>
@@ -25,11 +25,14 @@
 <article class="media content-section">
   <div class="media-body">
     <div class="article-metadata">
-      <h4><a class="mr-2" href="{{ url_for('students', class_id=data[x].classid) }}">{{data[x].classname}}</a></h4>
+      <!-- <h4><a class="mr-2" href="{{ url_for('students', class_id=data[x].classid) }}">{{data[x].classname}}</a></h4> -->
+      <h4 class="class_title">{{data[x].classname}}<span class="class_id_wrapper"
+          title="Class ID">{{data[x].classid}}</span></h4>
     </div>
-    <p class="article-content">Class ID = {{data[x].classid}}</a></p>
     <p class="article-content">Class attendance = {{data[x].class_average_attendance}} %</p>
     <p class="article-content">Number of Students = {{data[x].num_students}}</p>
+    <p class="article-content"> <a class="btn btn-outline-info"
+        href="{{ url_for('students', class_id=data[x].classid) }}">Display Students</a></p>
 
   </div>
 </article>

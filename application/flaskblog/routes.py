@@ -1,6 +1,5 @@
 import os
 import secrets
-from PIL import Image
 from flask import render_template, url_for, flash, redirect, request, abort
 from flaskblog import app, db, bcrypt
 from flaskblog.forms import LoginForm
@@ -80,6 +79,7 @@ def home():
         global num_classes
         global tot_stu
         num_classes = len(teaching_classes)
+        tot_stu = 0
         
         Data = []
         for x in range(len(teaching_classes)):           
@@ -116,13 +116,21 @@ def login():
 
 
 @app.route("/mark_attendance/<int:class_id>")
+@login_required
 def mark_attendance(class_id):
-    attendance = Attendance(class_id=class_id,id=current_user.id,date_attended=datetime.utcnow().date())
-    db.session.add(attendance)
-    db.session.commit()
+    exists = bool(Attendance.query.filter_by(class_id=class_id,id=current_user.id,date_attended=datetime.utcnow().date()).first())
+    if not exists:
+        attendance = Attendance(class_id=class_id,id=current_user.id,date_attended=datetime.utcnow().date())
+        db.session.add(attendance)
+        db.session.commit()
+    else:
+        flash('Attendance has already been marked', 'danger')
+        return redirect(url_for('home'))
     return redirect(url_for('home'))
 
+
 @app.route("/students/<int:class_id>")
+@login_required
 def students(class_id):
     num_of_days_in_current_month = monthrange(datetime.utcnow().year,datetime.utcnow().month)[1]
     first_day_month = datetime.utcnow().date().replace(day=1)

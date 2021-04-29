@@ -10,6 +10,9 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
     integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&display=swap" rel="stylesheet">
+
   <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='main.css') }}">
 
   {% if title %}
@@ -80,9 +83,10 @@
             {% if current_user.role == 'T' %}
             <li class="list-group-item list-group-item-light">Total Number of Classes: {{number_of_classes}}</li>
             <li class="list-group-item list-group-item-light">Total Number of Students: {{total_students}} </li>
-            {%endif%}
             {% if average_attendance %}
             <li class="list-group-item list-group-item-light">Average Attendance: {{average_attendance}} %</li>
+            {%endif%}
+
             {%endif%}
           </ul>
           </p>

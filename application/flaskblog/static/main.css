@@ -4,8 +4,32 @@ body {
   margin-top: 5rem;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1, h2, h3, h4, h5, h6
+{
+  font-family: 'Lato', sans-serif;
+  font-weight: bold;
   color: #222222;
+}
+
+.class_id_wrapper
+{
+  border-radius: 99999px;
+  background-color: #2e91dd;
+  padding: 0.25rem;
+  font-weight: 800;
+  font-size: 16px;
+  height: 2rem;
+  width: 2rem;
+  margin-left: 0.5rem;
+  display: block;
+  text-align: center;
+  line-height: 1.5rem;
+  color: #ffffff;
+}
+
+.class_title
+{
+  display: flex;
 }
 
 .bg-steel {
@@ -35,6 +59,7 @@ h1, h2, h3, h4, h5, h6 {
 .article-title {
   color: #444444;
 }
+
 
 a.article-title:hover {
   color: #428bca;
@@ -82,4 +107,17 @@ a.article-title:hover {
 .list-group-item-light {
   color: #000000;
   background-color: #fdfdfe;
+}
+
+.btn-outline-info
+{
+  
+  color: #2e91dd;
+  border-color: #2e91dd;
+}
+
+.btn-outline-info:hover
+{
+  background-color: #2e91dd;
+  color: #fdfdfd;
 }
