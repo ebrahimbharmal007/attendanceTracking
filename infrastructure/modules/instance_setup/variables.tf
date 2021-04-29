@@ -11,7 +11,7 @@ variable "public_subnets" {
 variable "instance_ami" {
   type        = string
   description = "ec2 instance ami"
-  default     = "ami-0742b4e673072066f"
+  default     = "ami-042e8287309f5df03"
 }
 
 variable "instance_type" {
