@@ -80,6 +80,8 @@
             {% if current_user.role == 'T' %}
             <li class="list-group-item list-group-item-light">Total Number of Classes: {{number_of_classes}}</li>
             <li class="list-group-item list-group-item-light">Total Number of Students: {{total_students}} </li>
+            {%endif%}
+            {% if average_attendance %}
             <li class="list-group-item list-group-item-light">Average Attendance: {{average_attendance}} %</li>
             {%endif%}
           </ul>

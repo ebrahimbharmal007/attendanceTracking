@@ -4,8 +4,11 @@
 <article class="media content-section">
   <div class="media-body">
     <div class="article-metadata">
-      <a class="mr-2">{{students_info[x].name}}</a>
+      <h4><a class="mr-2">{{data[x].studentname}}</a></h4>
     </div>
+    <p class="article-content">ID = {{data[x].studentid}}</a></p>
+
+    <p class="article-content">Class attendance = {{data[x].class_attendance}} %</a></p>
   </div>
 </article>
 {% endfor %}

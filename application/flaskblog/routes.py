@@ -9,6 +9,9 @@ from flask_login import login_user, current_user, logout_user, login_required
 from datetime import datetime
 from calendar import monthrange
 
+num_classes = 0
+tot_stu = 0
+
 class studentdashboarddata:
   def __init__(self, classname, classid,instructorname,class_average_attendance):
     self.classname = classname
@@ -20,13 +23,23 @@ class studentdashboarddata:
       return f"studentdashboarddata('{self.classname}', '{self.classid}', '{self.instructorname}', '{self.class_average_attendance}')"
 
 class teacherdashboarddata:
-  def __init__(self, classname, classid,class_average_attendance):
+  def __init__(self, classname, classid,class_average_attendance,num_students):
     self.classname = classname
     self.classid = classid
     self.class_average_attendance = class_average_attendance
+    self.num_students = num_students
 
   def __repr__(self):
-      return f"studentdashboarddata('{self.classname}', '{self.classid}','{self.class_average_attendance}')"
+      return f"studentdashboarddata('{self.classname}', '{self.classid}','{self.class_average_attendance}','{self.num_students}')"
+
+class displaystudent:
+  def __init__(self, studentname, studentid,class_attendance):
+    self.studentname = studentname
+    self.studentid = studentid
+    self.class_attendance = class_attendance
+
+  def __repr__(self):
+      return f"studentdashboarddata('{self.studentname}', '{self.studentid}', '{self.class_attendance}', '{self.overall_attendance}')"
 
 
 @app.route("/")
@@ -64,15 +77,17 @@ def home():
         # teaching_classes_info = Classes.query.filter_by(id=current_user.id).all()
         # attendance_percentage = [round((Attendance.query.filter_by(class_id=x.class_id,date_attended=datetime.utcnow().date()).count()/Enrollment.query.filter_by(class_id=x.class_id).count())*100,1) for x in teaching_classes_info]
         teaching_classes = Classes.query.filter_by(id=current_user.id).all()
-        number_of_classes = len(teaching_classes)
-        total_students = 0
+        global num_classes
+        global tot_stu
+        num_classes = len(teaching_classes)
+        
         Data = []
         for x in range(len(teaching_classes)):           
             num_students_class_attended = Attendance.query.filter_by(class_id=teaching_classes[x].class_id,date_attended=datetime.utcnow().date()).count()
             total_num_of_students_in_class = Enrollment.query.filter_by(class_id=teaching_classes[x].class_id).count()
-            total_students += total_num_of_students_in_class
+            tot_stu += total_num_of_students_in_class
             class_attendance = round((num_students_class_attended/total_num_of_students_in_class)*100)
-            temp = teacherdashboarddata(teaching_classes[x].name,teaching_classes[x].class_id,class_attendance)
+            temp = teacherdashboarddata(teaching_classes[x].name,teaching_classes[x].class_id,class_attendance,total_num_of_students_in_class)
             Data.append(temp)
         Data = sorted(Data, key=lambda x: x.class_average_attendance,reverse=True)
         average_attendance = 0
@@ -80,7 +95,7 @@ def home():
             average_attendance += d.class_average_attendance
         average_attendance = average_attendance/len(Data)
 
-        return render_template('home.html',data = Data,number_of_classes = number_of_classes, total_students=total_students,size=len(Data),average_attendance=average_attendance)
+        return render_template('home.html',data = Data,number_of_classes = num_classes, total_students=tot_stu,size=len(Data),average_attendance=average_attendance)
 
     
 
@@ -109,11 +124,17 @@ def mark_attendance(class_id):
 
 @app.route("/students/<int:class_id>")
 def students(class_id):
-    # enrollment = Enrollment.query.filter_by(class_id=class_id).all()
+    num_of_days_in_current_month = monthrange(datetime.utcnow().year,datetime.utcnow().month)[1]
+    first_day_month = datetime.utcnow().date().replace(day=1)
+    last_day_month = datetime.utcnow().date().replace(day=num_of_days_in_current_month)
     students_info = [User.query.filter_by(id=classinfo.id).first() for classinfo in Enrollment.query.filter_by(class_id=class_id).all()]
-
-
-    return render_template('students.html', title='Info',students_info=students_info,size=len(students_info))
+    Data = []
+    for x in range(len(students_info)):
+        class_attendance = round((Attendance.query.filter_by(id=students_info[x].id,class_id=class_id).filter(Attendance.date_attended.between(first_day_month,last_day_month)).count() / num_of_days_in_current_month)*100)
+        temp=displaystudent(students_info[x].name,students_info[x].id,class_attendance)
+        Data.append(temp)
+    Data = sorted(Data, key=lambda x: x.class_attendance,reverse=True)
+    return render_template('students.html', title='Info',data=Data,size=len(Data),number_of_classes = num_classes, total_students=tot_stu)
 
 @app.route("/logout")
 def logout():
