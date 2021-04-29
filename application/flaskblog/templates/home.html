@@ -1,0 +1,41 @@
+{% extends "layout.html" %}
+{% block content %}
+{% if user.role == 'S'%}
+<div class="content-section">
+  <h1>Name: {{user.name}}</h1>
+  <h1>Role: Student</h1>
+  <h1>Classes Enrolled in: </h1>
+  {% for x in range(s_size) %}
+  <article class="media content-section">
+    <div class="media-body">
+      <div class="article-metadata">
+        <a class="mr-2">{{classes[x].name}}</a>
+        <small class="text-muted">{{classes[x].class_id}}</small>
+      </div>
+      <p class="article-content"> <a class="mr-2"
+          href="{{ url_for('mark_attendance', class_id=classes[x].class_id) }}">Mark Attendance</a></p>
+    </div>
+  </article>
+  {% endfor %}
+</div>
+{%else%}
+<div class="content-section">
+  <h1>Name: {{user.name}}</h1>
+  <h1>Role: Teacher</h1>
+  <h1>Teaching Classes: </h1>
+  {% for x in range(t_size) %}
+  <article class="media content-section">
+    <div class="media-body">
+      <div class="article-metadata">
+        <a class="mr-2" href="#">{{classes[x].name}}</a>
+        <!-- <small class="text-muted">{{classes[x].class_id}}</small> -->
+      </div>
+    </div>
+  </article>
+  {% endfor %}
+</div>
+
+{%endif%}
+
+
+{% endblock content %}

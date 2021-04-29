@@ -1,0 +1,6 @@
+*.tfstate
+*.lock
+*.hcl
+*.backup
+infrastructure/.terraform
+application/flaskblog/__pycache__
