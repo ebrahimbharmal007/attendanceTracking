@@ -12,8 +12,12 @@
         <a class="mr-2">{{classes[x].name}}</a>
         <small class="text-muted">{{classes[x].class_id}}</small>
       </div>
+      {% if classes[x].class_id not in attendance_info%}
       <p class="article-content"> <a class="mr-2"
           href="{{ url_for('mark_attendance', class_id=classes[x].class_id) }}">Mark Attendance</a></p>
+      {%else%}
+      <p class="article-content"> <a class="mr-2">Attendance Marked for the day</a></p>
+      {%endif%}
     </div>
   </article>
   {% endfor %}
@@ -27,8 +31,8 @@
   <article class="media content-section">
     <div class="media-body">
       <div class="article-metadata">
-        <a class="mr-2" href="#">{{classes[x].name}}</a>
-        <!-- <small class="text-muted">{{classes[x].class_id}}</small> -->
+        <a class="mr-2" href="{{ url_for('students', class_id=classes[x].class_id) }}">{{classes[x].name}}</a>
+        <small class="text-muted">{{attendance[x]}} %</small>
       </div>
     </div>
   </article>
