@@ -41,3 +41,32 @@ module "instance_setup" {
   vpc_id         = module.vpc_setup.vpc_id
   key_name       = var.key_name
 }
+
+resource "aws_db_subnet_group" "private_db" {
+  name       = "${var.vpc_name}_priv_subnetgroup"
+  subnet_ids = module.vpc_setup.private_subnet_ids
+
+  tags = {
+    Name    = "${var.vpc_name}_priv_subnetgroup"
+    Project = var.project_name
+  }
+}
+
+resource "aws_db_instance" "attendance_db" {
+  allocated_storage   = 10
+  engine              = "mysql"
+  instance_class      = "db.t2.micro"
+  name                = "${lower(var.project_name)}db"
+  username            = "admin"
+  password            = "attendance"
+  skip_final_snapshot = true
+  depends_on = [
+    aws_db_subnet_group.private_db
+  ]
+  db_subnet_group_name = aws_db_subnet_group.private_db.name
+
+  tags = {
+    Name    = "${var.project_name}-db"
+    Project = var.project_name
+  }
+}

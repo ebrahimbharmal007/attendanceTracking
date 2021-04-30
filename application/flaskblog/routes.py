@@ -70,7 +70,7 @@ def home():
         average_attendance = 0
         for d in Data:
             average_attendance += d.class_average_attendance
-        average_attendance = average_attendance/len(Data)
+        average_attendance = round(average_attendance/len(Data))
         return render_template('home.html',classes=classes_enrolled,size=len(Data),attendance_info=classes_attended_today,data=Data,average_attendance=average_attendance)
     else:
         # teaching_classes_info = Classes.query.filter_by(id=current_user.id).all()
